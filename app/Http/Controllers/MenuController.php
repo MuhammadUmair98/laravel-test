@@ -115,7 +115,7 @@ class MenuController extends BaseController
                     'parent_id' => $item->parent_id,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
-                    'children' => $this->get_children($item->children, true)
+                    'children' => $this->getNestedData($item->children, true)
                 ];
             }
         })->filter(function ($value) {
