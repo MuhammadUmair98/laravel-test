@@ -94,7 +94,32 @@ class MenuController extends BaseController
     ]
      */
 
-    public function getMenuItems() {
-        throw new \Exception('implement in coding task 3');
+    public function getMenuItems()
+    {
+        $menu_items = MenuItem::get();
+        $data = $this->getNestedData($menu_items);
+        return $data;
+    }
+
+
+    function getNestedData($menu_items, $value = false)
+    {
+
+        return $menu_items->map(function ($item) use ($value) {
+            if ($value || !isset($item->parent_id)) {
+                $array_items[] = $item->id;
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'url' => $item->url,
+                    'parent_id' => $item->parent_id,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'children' => $this->get_children($item->children, true)
+                ];
+            }
+        })->filter(function ($value) {
+            return !is_null($value);
+        });
     }
 }
